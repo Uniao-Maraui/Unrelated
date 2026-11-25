@@ -29,6 +29,9 @@ class Jogo:
     def ir_para_menu(self) -> None:
         self.trocar_cena(CenaMenu(self))
 
+    def iniciar_partida(self, modo: str) -> None:
+        """A partida ainda não existe; ela chega na próxima etapa."""
+
     def executar(self) -> None:
         """Repete até a janela ser fechada: eventos, lógica e desenho."""
         while self.rodando:
