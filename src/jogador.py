@@ -24,6 +24,36 @@ class Jogador(pygame.sprite.Sprite):
         # O nome "radius" é o que o Pygame procura na colisão por círculos
         self.radius = cfg.RAIO_COLISAO_JOGADOR
         self.controles = controles
+        # Começam com _ porque só a própria classe pode alterá-las
+        self._vidas = cfg.VIDAS_MAXIMAS
+        self.tempo_invulneravel = 0.0
+
+    @property
+    def vidas(self) -> int:
+        return self._vidas
+
+    @property
+    def vivo(self) -> bool:
+        return self._vidas > 0
+
+    @property
+    def invulneravel(self) -> bool:
+        return self.tempo_invulneravel > 0
+
+    @property
+    def visivel(self) -> bool:
+        """É falso nos instantes em que o coração "apaga" ao piscar."""
+        if not self.invulneravel:
+            return True
+        return int(self.tempo_invulneravel / cfg.INTERVALO_PISCAR) % 2 == 0
+
+    def receber_dano(self) -> bool:
+        """Tira uma vida, se for possível. Devolve True se tirou."""
+        if not self.vivo or self.invulneravel:
+            return False
+        self._vidas -= 1
+        self.tempo_invulneravel = cfg.TEMPO_INVULNERAVEL
+        return True
 
     def _apertou(self, teclas, acao: str) -> bool:
         return any(teclas[conjunto[acao]] for conjunto in self.controles)
@@ -45,6 +75,7 @@ class Jogador(pygame.sprite.Sprite):
         return direcao
 
     def update(self, dt: float, teclas, arena: Arena) -> None:
+        self.tempo_invulneravel = max(0.0, self.tempo_invulneravel - dt)
         # distância = direção x velocidade x tempo
         self.posicao += self.calcular_direcao(teclas) * cfg.VELOCIDADE_JOGADOR * dt
         self._manter_na_arena(arena)
@@ -60,4 +91,5 @@ class Jogador(pygame.sprite.Sprite):
         self.rect = dentro
 
     def desenhar(self, tela: pygame.Surface) -> None:
-        tela.blit(self.image, self.rect)
+        if self.visivel:
+            tela.blit(self.image, self.rect)

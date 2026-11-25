@@ -1,4 +1,4 @@
-"""Elementos de interface: botões e menus."""
+"""Elementos de interface: botões, menus e o HUD."""
 
 from typing import Callable
 
@@ -73,3 +73,28 @@ class MenuBotoes:
     def desenhar(self, tela: pygame.Surface, fonte: pygame.font.Font) -> None:
         for indice, botao in enumerate(self.botoes):
             botao.desenhar(tela, fonte, indice == self.selecionado)
+
+
+class HUD:
+    """As informações dos jogadores na parte de baixo da tela."""
+
+    TAMANHO_CORACAO = (22, 22)
+    LARGURA_BLOCO = 220
+    MARGEM = 30
+    Y_NOME, Y_CORACOES = 520, 552
+
+    def __init__(self, fonte: pygame.font.Font):
+        self.fonte = fonte
+
+    def desenhar(self, tela: pygame.Surface, jogadores: list) -> None:
+        for indice, jogador in enumerate(jogadores):
+            # O primeiro bloco fica à esquerda e o segundo, à direita
+            if indice == 0:
+                x = self.MARGEM
+            else:
+                x = cfg.LARGURA_TELA - self.MARGEM - self.LARGURA_BLOCO
+            nome = self.fonte.render(jogador.nome, True, cfg.BRANCO)
+            tela.blit(nome, (x, self.Y_NOME))
+            coracao = pygame.transform.scale(jogador.image, self.TAMANHO_CORACAO)
+            for numero in range(jogador.vidas):
+                tela.blit(coracao, (x + numero * 30, self.Y_CORACOES))
