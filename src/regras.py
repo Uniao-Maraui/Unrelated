@@ -1,5 +1,6 @@
 """Regras da partida, separadas da tela para ficarem fáceis de ler."""
 
+import random
 from dataclasses import dataclass
 
 import pygame
@@ -49,3 +50,27 @@ def aplicar_danos(jogadores: list[Jogador],
         for projetil in tocados:
             projetil.kill()
     return atingidos
+
+
+def distribuir_coletaveis(jogadores: list[Jogador],
+                          coletaveis: pygame.sprite.Group) -> list:
+    """Entrega cada item tocado a um jogador e devolve os itens coletados.
+
+    Se os dois encostarem no mesmo quadro, fica com quem estiver mais perto do
+    centro do item. Se a distância for igual, há um sorteio.
+    """
+    coletados = []
+    for item in list(coletaveis):
+        candidatos = [jogador for jogador in jogadores
+                      if jogador.vivo and pygame.sprite.collide_circle(jogador, item)]
+        if not candidatos:
+            continue
+        distancias = [jogador.posicao.distance_to(item.rect.center)
+                      for jogador in candidatos]
+        menor = min(distancias)
+        mais_proximos = [jogador for jogador, distancia in zip(candidatos, distancias)
+                         if distancia == menor]
+        item.aplicar(random.choice(mais_proximos))
+        item.kill()
+        coletados.append(item)
+    return coletados

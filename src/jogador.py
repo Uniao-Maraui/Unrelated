@@ -63,6 +63,10 @@ class Jogador(pygame.sprite.Sprite):
         self.tempo_invulneravel = cfg.TEMPO_INVULNERAVEL
         return True
 
+    def curar(self) -> None:
+        """Devolve uma vida, sem passar do máximo."""
+        self._vidas = min(self._vidas + 1, cfg.VIDAS_MAXIMAS)
+
     def _apertou(self, teclas, acao: str) -> bool:
         return any(teclas[conjunto[acao]] for conjunto in self.controles)
 

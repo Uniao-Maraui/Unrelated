@@ -5,11 +5,12 @@ import pygame
 from src import configuracoes as cfg
 from src.arena import Arena
 from src.cenas.cena import Cena
+from src.coletaveis import GeradorColetaveis
 from src.inimigos import TIPOS_INIMIGOS
 from src.interface import HUD
 from src.jogador import Jogador
 from src.ondas import GerenciadorOndas
-from src.regras import aplicar_danos, calcular_resultado
+from src.regras import aplicar_danos, calcular_resultado, distribuir_coletaveis
 
 
 class CenaPartida(Cena):
@@ -27,6 +28,8 @@ class CenaPartida(Cena):
         ]
         self.ondas = GerenciadorOndas(TIPOS_INIMIGOS, jogo.recursos, self.arena)
         self.projeteis = pygame.sprite.Group()
+        self.gerador = GeradorColetaveis(jogo.recursos)
+        self.coletaveis = pygame.sprite.Group()
         self.hud = HUD(pygame.font.Font(None, 32))
 
     def tratar_evento(self, evento: pygame.event.Event) -> None:
@@ -42,12 +45,24 @@ class CenaPartida(Cena):
                 jogador.adicionar_pontos(cfg.PONTOS_POR_SEGUNDO * dt)
         self._criar_ataques(dt)
         self.projeteis.update(dt)
+        self._atualizar_coletaveis(dt)
+        # O dano vem antes: quem perdeu a última vida não coleta uma cura
         aplicar_danos(self.jogadores, self.projeteis)
+        distribuir_coletaveis(self.jogadores, self.coletaveis)
         self._verificar_fim()
 
     def _criar_ataques(self, dt: float) -> None:
         vivos = [jogador for jogador in self.jogadores if jogador.vivo]
         self.projeteis.add(self.ondas.update(dt, vivos, len(self.projeteis)))
+
+    def _atualizar_coletaveis(self, dt: float) -> None:
+        novo = self.gerador.update(dt, self.arena)
+        if novo is not None:
+            self.coletaveis.add(novo)
+        self.coletaveis.update(dt)
+        for item in self.coletaveis:
+            # Se a caixa encolher, o item é empurrado para dentro dela
+            item.rect.clamp_ip(self.arena.rect)
 
     def _verificar_fim(self) -> None:
         """A partida acaba quando alguém perde todas as vidas."""
@@ -59,6 +74,7 @@ class CenaPartida(Cena):
         tela.fill(cfg.PRETO)
         self.ondas.inimigos.draw(tela)
         self.arena.desenhar(tela)
+        self.coletaveis.draw(tela)
         self.projeteis.draw(tela)
         for jogador in self.jogadores:
             jogador.desenhar(tela)
