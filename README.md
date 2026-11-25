@@ -105,11 +105,11 @@ Os sons ficam em `assets/sons`: `dano.wav`, `coleta.wav`, `cura.wav`, `game_over
 
 Os projéteis soltos são círculos brancos desenhados pelo código. O dano e a coleta acontecem quando pixels visíveis se tocam; partes transparentes não contam. Por isso, um desenho maior também aumenta a área de acerto, e um fundo que não seja transparente contaria como parte do desenho. As imagens dos projéteis não giram, então prefira desenhos redondos ou, na chuva, que apontem para o sentido da queda.
 
-O script `ferramentas/gerar_recursos.py` recria os arquivos que ele sabe desenhar e que estiverem faltando: os genéricos e o anel do projétil lateral. Ele nunca sobrescreve um arquivo existente e não cria os outros dois projéteis.
+Se uma imagem ou um som for apagado por engano, recupere só esse arquivo pelo Git, por exemplo com `git restore assets/imagens/jogador1.png`.
 
 ## Fontes e licenças
 
-Quase todas as imagens usadas no jogo vêm de pacotes de outras pessoas. O projétil lateral foi desenhado neste projeto. Os sons ainda são genéricos, criados pelo script `ferramentas/gerar_recursos.py`.
+Quase todas as imagens usadas no jogo vêm de pacotes de outras pessoas. O projétil lateral foi desenhado neste projeto. Os sons ainda são genéricos, gerados por código para este projeto.
 
 Os arquivos de arte de terceiros pertencem aos seus autores. Eles estão aqui como parte deste jogo e não devem ser retirados do projeto para redistribuição ou revenda.
 
@@ -118,7 +118,7 @@ Os arquivos de arte de terceiros pertencem aos seus autores. Eles estão aqui co
 | `inimigo_chuva.png`, `inimigo_lateral.png`, `inimigo_mira.png` | RPG Battlers, de LimeZu | https://limezu.itch.io/21rpg-battlers | Uso gratuito ou comercial e modificação permitidos; redistribuição e revenda proibidas | Centralizados em um quadro de 32 x 32 |
 | `jogador1.png`, `jogador2.png` | Retro UI Kit Lite, de Willosuna | https://willosuna.itch.io/retro-ui-kit-lite | Uso em jogos e modificação permitidos, crédito opcional; proibido redistribuir as imagens como pacote | Ampliados 3 vezes; o do jogador 2 foi pintado de azul |
 | `projetil_chuva.png` | Pixel Spaceships & Shmup Kit Lite, de Willosuna | Página da versão completa, indicada no pacote: https://willosuna.itch.io/pixel-shmup-kit | Uso em jogos e modificação permitidos, crédito opcional; proibido redistribuir as imagens como pacote | Ampliado 2 vezes |
-| `projetil_lateral.png` | Desenho criado neste projeto | `ferramentas/gerar_recursos.py`, função `criar_anel` | Não vem de pacote de outra pessoa | Nenhuma |
+| `projetil_lateral.png` | Desenho criado neste projeto | Gerado por código; o script está no histórico do Git, no commit `6a51285` | Não vem de pacote de outra pessoa | Nenhuma |
 | `projetil_mira.png` | Amostra gratuita da Northleaf Studio; o leia-me informa uso de assistência de IA | https://northleafstudio.itch.io/space-shooter-sprites-pixel-art | Grátis em jogos pessoais e comerciais, pode ficar no repositório do jogo; proibido redistribuir como pacote de arte | Primeiro quadro, ampliado 2 vezes |
 | `item_pontos.png`, `item_cura.png` | Pixel UI & Pickup FX (Pixel FX Series, pacote 8); autoria não informada no pacote | Não informado no pacote | Uso em jogos e modificação permitidos, crédito opcional; proibido redistribuir como arquivos avulsos ou pacote | Primeiro quadro da animação |
 
@@ -132,7 +132,6 @@ requirements.txt   biblioteca necessária
 src/               código do jogo
 src/cenas/         telas: menu, partida e game over
 assets/            imagens e sons
-ferramentas/       script que cria os recursos genéricos
 documentacao/      enunciado, plano e guia de estudo
 ```
 

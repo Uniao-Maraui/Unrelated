@@ -94,7 +94,7 @@ Ao fim da Etapa 5, a versão Solo já deve atender aos requisitos 2 a 8.
 
 ### Imagens e som
 - O visual ainda está em decisão: uma mistura de imagens geradas pelo Claude, desenhadas pela dupla e sprites gratuitos.
-- O projeto começa com PNGs provisórios gerados por um script. Para trocar uma imagem, basta substituir o arquivo mantendo o nome.
+- As imagens ficam em `assets/imagens`. Para trocar uma imagem, basta substituir o arquivo mantendo o nome.
 - Haverá efeitos sonoros e música.
 - Para qualquer imagem ou som baixado da internet, conferir se a licença permite o uso e anotar a fonte no `README.md`.
 
@@ -116,7 +116,6 @@ Estes pontos não foram discutidos antes. Qualquer um pode ser alterado.
 4. Fora da partida, ESC volta da escolha de modo para o menu inicial e do game over para o menu.
 5. Se os dois encostarem no mesmo item no mesmo quadro, fica com quem estiver mais perto do centro do item. Se a distância for igual, há sorteio.
 6. O código usa apenas recursos que também existem no Pygame clássico. Assim, se o professor não aceitar o `pygame-ce`, a troca de biblioteca deve exigir pouca ou nenhuma mudança no código.
-7. O script de imagens e sons provisórios nunca sobrescreve um arquivo existente.
 
 ## 1.7 O que fica a critério de quem implementar
 
@@ -125,6 +124,8 @@ Cores, tamanhos de fonte, espaçamento dos textos, desenho das imagens provisór
 ---
 
 # Parte 2 - Plano de execução
+
+> O script `ferramentas/gerar_recursos.py`, citado nas etapas 3 e 9, criou as imagens e os sons provisórios. A pasta `ferramentas` foi removida depois. Os trechos que a mencionam ficam apenas como registro.
 
 ## 2.1 Restrições globais
 
@@ -251,8 +252,6 @@ Unrelated/
 |-- assets/
 |   |-- imagens/
 |   `-- sons/
-|-- ferramentas/
-|   `-- gerar_recursos.py    cria imagens e sons provisórios
 `-- documentacao/
 ```
 
