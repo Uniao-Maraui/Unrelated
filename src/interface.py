@@ -14,7 +14,7 @@ class Botao:
     o que ela faz, e a mesma classe serve para qualquer botão do jogo.
     """
 
-    LARGURA, ALTURA = 280, 56
+    LARGURA, ALTURA = 320, 56
 
     def __init__(self, texto: str, centro: tuple[int, int], acao: Callable[[], None]):
         self.texto = texto
@@ -81,7 +81,7 @@ class HUD:
     TAMANHO_CORACAO = (22, 22)
     LARGURA_BLOCO = 220
     MARGEM = 30
-    Y_NOME, Y_CORACOES = 520, 552
+    Y_NOME, Y_CORACOES, Y_PONTOS = 500, 530, 564
 
     def __init__(self, fonte: pygame.font.Font):
         self.fonte = fonte
@@ -98,3 +98,5 @@ class HUD:
             coracao = pygame.transform.scale(jogador.image, self.TAMANHO_CORACAO)
             for numero in range(jogador.vidas):
                 tela.blit(coracao, (x + numero * 30, self.Y_CORACOES))
+            pontos = self.fonte.render(f"Pontos: {int(jogador.pontos)}", True, cfg.AMARELO)
+            tela.blit(pontos, (x, self.Y_PONTOS))

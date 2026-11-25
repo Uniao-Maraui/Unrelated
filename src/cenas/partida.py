@@ -8,7 +8,7 @@ from src.cenas.cena import Cena
 from src.inimigos import InimigoChuva
 from src.interface import HUD
 from src.jogador import Jogador
-from src.regras import aplicar_danos
+from src.regras import aplicar_danos, calcular_resultado
 
 
 class CenaPartida(Cena):
@@ -38,6 +38,8 @@ class CenaPartida(Cena):
         teclas = pygame.key.get_pressed()
         for jogador in self.jogadores:
             jogador.update(dt, teclas, self.arena)
+            if jogador.vivo:
+                jogador.adicionar_pontos(cfg.PONTOS_POR_SEGUNDO * dt)
         self._criar_ataques(dt)
         self.projeteis.update(dt)
         aplicar_danos(self.jogadores, self.projeteis)
@@ -52,7 +54,8 @@ class CenaPartida(Cena):
     def _verificar_fim(self) -> None:
         """A partida acaba quando alguém perde todas as vidas."""
         if not all(jogador.vivo for jogador in self.jogadores):
-            self.jogo.ir_para_menu()
+            resultado = calcular_resultado(self.modo, self.jogadores)
+            self.jogo.mostrar_game_over(resultado)
 
     def desenhar(self, tela: pygame.Surface) -> None:
         tela.fill(cfg.PRETO)

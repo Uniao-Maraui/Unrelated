@@ -27,6 +27,14 @@ class Jogador(pygame.sprite.Sprite):
         # Começam com _ porque só a própria classe pode alterá-las
         self._vidas = cfg.VIDAS_MAXIMAS
         self.tempo_invulneravel = 0.0
+        self._pontos = 0.0
+
+    @property
+    def pontos(self) -> float:
+        return self._pontos
+
+    def adicionar_pontos(self, valor: float) -> None:
+        self._pontos += valor
 
     @property
     def vidas(self) -> int:

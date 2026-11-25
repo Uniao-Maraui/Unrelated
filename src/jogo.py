@@ -4,9 +4,11 @@ import pygame
 
 from src import configuracoes as cfg
 from src.cenas.cena import Cena
+from src.cenas.game_over import CenaGameOver
 from src.cenas.menu import CenaMenu
 from src.cenas.partida import CenaPartida
 from src.recursos import Recursos
+from src.regras import ResultadoPartida
 
 
 class Jogo:
@@ -35,6 +37,9 @@ class Jogo:
 
     def iniciar_partida(self, modo: str) -> None:
         self.trocar_cena(CenaPartida(self, modo))
+
+    def mostrar_game_over(self, resultado: ResultadoPartida) -> None:
+        self.trocar_cena(CenaGameOver(self, resultado))
 
     def executar(self) -> None:
         """Repete até a janela ser fechada: eventos, lógica e desenho."""
