@@ -25,6 +25,7 @@ class Jogo:
         pygame.display.set_caption(cfg.TITULO)
         # Criado depois da janela: carregar imagens exige que ela exista
         self.recursos = Recursos()
+        self.recursos.iniciar_musica()  # continua tocando em todas as telas
         self.relogio = pygame.time.Clock()
         self.rodando = True
         self.cena: Cena = CenaMenu(self)

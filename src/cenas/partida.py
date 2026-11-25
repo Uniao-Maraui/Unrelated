@@ -60,8 +60,9 @@ class CenaPartida(Cena):
         self.projeteis.update(dt)
         self._atualizar_coletaveis(dt)
         # O dano vem antes: quem perdeu a última vida não coleta uma cura
-        aplicar_danos(self.jogadores, self.projeteis)
-        distribuir_coletaveis(self.jogadores, self.coletaveis)
+        atingidos = aplicar_danos(self.jogadores, self.projeteis)
+        coletados = distribuir_coletaveis(self.jogadores, self.coletaveis)
+        self._tocar_sons(atingidos, coletados)
         self._verificar_fim()
 
     def _criar_ataques(self, dt: float) -> None:
@@ -76,6 +77,12 @@ class CenaPartida(Cena):
         for item in self.coletaveis:
             # Se a caixa encolher, o item é empurrado para dentro dela
             item.rect.clamp_ip(self.arena.rect)
+
+    def _tocar_sons(self, atingidos: list, coletados: list) -> None:
+        if atingidos:
+            self.jogo.recursos.tocar("dano.wav")
+        for item in coletados:
+            self.jogo.recursos.tocar(item.nome_som)
 
     def _verificar_fim(self) -> None:
         """A partida acaba quando alguém perde todas as vidas."""

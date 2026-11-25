@@ -22,6 +22,7 @@ class CenaGameOver(Cena):
             Botao("Jogar Novamente", (centro_x, 390), self.jogar_novamente),
             Botao("Menu", (centro_x, 466), jogo.ir_para_menu),
         ])
+        jogo.recursos.tocar("game_over.wav")
 
     def linhas_do_resultado(self) -> list[str]:
         """Os textos que explicam como a partida terminou."""
