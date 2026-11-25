@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 import pygame
 
+from src import configuracoes as cfg
 from src.jogador import Jogador
 
 
@@ -22,9 +23,27 @@ class ResultadoPartida:
 
 
 def calcular_resultado(modo: str, jogadores: list[Jogador]) -> ResultadoPartida:
-    """Monta o resultado. Vencedor e bônus entram junto com o modo Versus."""
-    pontos = tuple(int(jogador.pontos) for jogador in jogadores)
-    return ResultadoPartida(modo, pontos, None, None)
+    """Calcula os pontos finais sem alterar os jogadores.
+
+    No Versus, se só um sobreviveu, ele recebe o bônus. Vence quem tiver mais
+    pontos, mesmo que tenha sido eliminado. Pontos iguais dão empate.
+    """
+    pontos = [int(jogador.pontos) for jogador in jogadores]
+    if modo != cfg.MODO_VERSUS:
+        return ResultadoPartida(modo, tuple(pontos), None, None)
+
+    sobrevivente = None
+    vivos = [jogador for jogador in jogadores if jogador.vivo]
+    if len(vivos) == 1:
+        sobrevivente = vivos[0].nome
+        pontos[jogadores.index(vivos[0])] += cfg.BONUS_SOBREVIVENCIA
+
+    vencedor = None
+    maior = max(pontos)
+    if pontos.count(maior) == 1:  # só um tem a maior pontuação
+        vencedor = jogadores[pontos.index(maior)].nome
+
+    return ResultadoPartida(modo, tuple(pontos), vencedor, sobrevivente)
 
 
 def aplicar_danos(jogadores: list[Jogador],

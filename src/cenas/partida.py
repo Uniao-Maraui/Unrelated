@@ -20,17 +20,30 @@ class CenaPartida(Cena):
         super().__init__(jogo)
         self.modo = modo
         self.arena = Arena(cfg.CENTRO_ARENA, cfg.TAMANHOS_ARENA)
-        imagem = jogo.recursos.imagem("jogador1.png", cfg.TAMANHO_JOGADOR)
-        # No Solo valem os dois conjuntos de teclas
-        self.jogadores = [
-            Jogador("Jogador 1", imagem, cfg.CENTRO_ARENA,
-                    [cfg.TECLAS_P1, cfg.TECLAS_P2]),
-        ]
+        self.jogadores = self._criar_jogadores()
         self.ondas = GerenciadorOndas(TIPOS_INIMIGOS, jogo.recursos, self.arena)
         self.projeteis = pygame.sprite.Group()
         self.gerador = GeradorColetaveis(jogo.recursos)
         self.coletaveis = pygame.sprite.Group()
         self.hud = HUD(pygame.font.Font(None, 32))
+
+    def _criar_jogadores(self) -> list[Jogador]:
+        if self.modo == cfg.MODO_VERSUS:
+            x, y = cfg.CENTRO_ARENA
+            return [
+                self._criar_jogador("Jogador 1", "jogador1.png",
+                                    (x - cfg.AFASTAMENTO_VERSUS, y), [cfg.TECLAS_P1]),
+                self._criar_jogador("Jogador 2", "jogador2.png",
+                                    (x + cfg.AFASTAMENTO_VERSUS, y), [cfg.TECLAS_P2]),
+            ]
+        # No Solo valem os dois conjuntos de teclas
+        return [self._criar_jogador("Jogador 1", "jogador1.png", cfg.CENTRO_ARENA,
+                                    [cfg.TECLAS_P1, cfg.TECLAS_P2])]
+
+    def _criar_jogador(self, nome: str, arquivo: str, posicao: tuple[int, int],
+                       controles: list) -> Jogador:
+        imagem = self.jogo.recursos.imagem(arquivo, cfg.TAMANHO_JOGADOR)
+        return Jogador(nome, imagem, posicao, controles)
 
     def tratar_evento(self, evento: pygame.event.Event) -> None:
         if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:

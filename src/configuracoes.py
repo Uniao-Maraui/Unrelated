@@ -14,6 +14,7 @@ AMARELO, CINZA = (255, 220, 0), (120, 120, 120)
 
 # Modos e controles
 MODO_SOLO, MODO_VERSUS = "solo", "versus"
+AFASTAMENTO_VERSUS = 60                   # distância inicial de cada um ao centro
 TECLAS_P1 = {"cima": pygame.K_w, "baixo": pygame.K_s,
              "esquerda": pygame.K_a, "direita": pygame.K_d}
 TECLAS_P2 = {"cima": pygame.K_UP, "baixo": pygame.K_DOWN,
