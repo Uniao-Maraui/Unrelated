@@ -5,6 +5,8 @@ import pygame
 from src import configuracoes as cfg
 from src.cenas.cena import Cena
 from src.cenas.menu import CenaMenu
+from src.cenas.partida import CenaPartida
+from src.recursos import Recursos
 
 
 class Jogo:
@@ -19,6 +21,8 @@ class Jogo:
         pygame.init()
         self.tela = pygame.display.set_mode((cfg.LARGURA_TELA, cfg.ALTURA_TELA))
         pygame.display.set_caption(cfg.TITULO)
+        # Criado depois da janela: carregar imagens exige que ela exista
+        self.recursos = Recursos()
         self.relogio = pygame.time.Clock()
         self.rodando = True
         self.cena: Cena = CenaMenu(self)
@@ -30,7 +34,7 @@ class Jogo:
         self.trocar_cena(CenaMenu(self))
 
     def iniciar_partida(self, modo: str) -> None:
-        """A partida ainda não existe; ela chega na próxima etapa."""
+        self.trocar_cena(CenaPartida(self, modo))
 
     def executar(self) -> None:
         """Repete até a janela ser fechada: eventos, lógica e desenho."""
