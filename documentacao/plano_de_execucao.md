@@ -134,6 +134,7 @@ Cores, tamanhos de fonte, espaçamento dos textos, desenho das imagens provisór
 - Nenhum caminho absoluto escrito no código. Imagens e sons são localizados a partir de `Path(__file__)`, o que mantém os caminhos relativos à pasta do projeto, de onde quer que o jogo seja executado.
 - Textos do jogo e nomes no código em português, sem acentos nos nomes de arquivos, classes, métodos e variáveis.
 - Valores ajustáveis ficam somente em `src/configuracoes.py`.
+- Não usar funções `lambda`. Quando uma função precisar ser passada como argumento, usar um método com nome.
 - Somente `src/jogo.py` importa as telas concretas. Uma tela pede a troca chamando um método de `Jogo`. Isso evita importação circular.
 - Sprites usam o método `update()`, nome que o Pygame espera. Telas usam `tratar_evento()`, `atualizar()` e `desenhar()`.
 - Não usar imagens, sons ou músicas originais de Undertale ou Deltarune.

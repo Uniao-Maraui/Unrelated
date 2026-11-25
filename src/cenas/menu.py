@@ -27,12 +27,16 @@ class CenaMenu(Cena):
         self.pagina = "modo"
         centro_x = cfg.LARGURA_TELA // 2
         self.menu = MenuBotoes([
-            Botao("Solo", (centro_x, 300),
-                  lambda: self.jogo.iniciar_partida(cfg.MODO_SOLO)),
-            Botao("Versus", (centro_x, 376),
-                  lambda: self.jogo.iniciar_partida(cfg.MODO_VERSUS)),
+            Botao("Solo", (centro_x, 300), self.jogar_solo),
+            Botao("Versus", (centro_x, 376), self.jogar_versus),
             Botao("Voltar", (centro_x, 452), self.mostrar_inicial),
         ])
+
+    def jogar_solo(self) -> None:
+        self.jogo.iniciar_partida(cfg.MODO_SOLO)
+
+    def jogar_versus(self) -> None:
+        self.jogo.iniciar_partida(cfg.MODO_VERSUS)
 
     def tratar_evento(self, evento: pygame.event.Event) -> None:
         apertou_esc = evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE
