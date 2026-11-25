@@ -67,7 +67,7 @@ Está em `CenaPartida.atualizar()`. A ordem importa.
 | `interface.py` | `HUD` | Nome, corações e pontos | `desenhar` |
 | `arena.py` | `Arena` | A caixa e sua mudança de tamanho | `mudar_tamanho`, `update`, `area_de_surgimento` |
 | `jogador.py` | `Jogador` | Movimento, vidas e pontos | `update`, `calcular_direcao`, `receber_dano`, `curar`, `adicionar_pontos` |
-| `projetil.py` | `Projetil` | Círculo que anda em linha reta | `update` |
+| `projetil.py` | `Projetil` | Anda em linha reta, com imagem ou como círculo | `update` |
 | `inimigos.py` | `Inimigo` e 3 tipos | Ritmo e forma dos ataques | `atualizar_ataque`, `atacar` |
 | `ondas.py` | `GerenciadorOndas` | Ondas, dificuldade e projéteis soltos | `update`, `multiplicadores`, `criar_projetil_solto` |
 | `coletaveis.py` | `Coletavel` e 2 tipos | Efeito de cada item | `update`, `aplicar` |
@@ -117,7 +117,7 @@ Um objeto é formado por outros. `CenaPartida` tem uma `Arena`, uma lista de `Jo
 | 7 | Pelo menos 2 sprites | `Recursos.imagem` e `assets/imagens` |
 | 8 | `Clock` e caminhos relativos | `Jogo.executar` e o começo de `recursos.py` |
 
-Os projéteis são círculos desenhados pelo código. As imagens exigidas no requisito 7 são as dos jogadores e dos inimigos.
+O requisito 7 é atendido pelas imagens dos jogadores e dos inimigos. Os projéteis dos inimigos também usam imagens; os soltos são círculos desenhados pelo código.
 
 ## 6. Perguntas de estudo
 
@@ -157,10 +157,13 @@ O `Rect` guarda apenas números inteiros. O `Vector2` guarda as casas decimais, 
 ### Projéteis, inimigos e vidas
 
 **O que `InimigoChuva` herda e o que implementa?**
-Herda o construtor, o cronômetro e `atualizar_ataque`. Define `nome_imagem`, `intervalo` e o método `atacar`.
+Herda o construtor, o cronômetro e `atualizar_ataque`. Define `nome_imagem`, `nome_projetil`, `intervalo` e o método `atacar`.
 
-**Como funciona a colisão por círculos?**
-`collide_circle` compara a distância entre os centros com a soma dos atributos `radius`. O raio do jogador (8) é menor que a metade da imagem (12), o que torna a colisão mais justa.
+**Como uma única classe `Projetil` tem aparências diferentes?**
+O construtor recebe uma imagem opcional. Cada inimigo passa a sua; os projéteis soltos não passam nenhuma e viram círculos brancos. A colisão acompanha o desenho de cada um.
+
+**Como funciona a colisão?**
+Cada coração, projétil e item tem uma máscara (`pygame.mask.from_surface`), que marca os pixels visíveis da imagem. `collide_mask` só acusa contato quando pixels visíveis dos dois se sobrepõem. Assim, o contato segue o formato do coração, da gota ou do anel, e não um quadrado ou círculo em volta.
 
 **Por que as vidas só mudam por métodos?**
 Os métodos garantem as regras: não perder vida durante a invulnerabilidade, não ficar abaixo de zero ao levar dano e não passar de 3 ao curar.
@@ -185,7 +188,7 @@ O game over recebe só os dados de que precisa, sem depender da partida. `@datac
 Ele recebe uma lista de classes, sorteia algumas, cria os objetos e chama o mesmo método em todos.
 
 **O que mudar para criar um quarto inimigo?**
-Criar uma classe que herda de `Inimigo`, com `nome_imagem`, `intervalo` e `atacar`; colocar a imagem em `assets/imagens`; e incluir a classe em `TIPOS_INIMIGOS`. O intervalo deve ir para `configuracoes.py`. Continuam aparecendo no máximo 3 de cada vez.
+Criar uma classe que herda de `Inimigo`, com `nome_imagem`, `nome_projetil`, `intervalo` e `atacar`; colocar as duas imagens em `assets/imagens`; e incluir a classe em `TIPOS_INIMIGOS`. O intervalo deve ir para `configuracoes.py`. Continuam aparecendo no máximo 3 de cada vez.
 
 **Como a dificuldade cresce?**
 Primeiro, aumentando a quantidade de inimigos (1, 1, 2, 3). Os projéteis soltos ficam mais frequentes desde o começo. Depois da quarta onda, velocidade e frequência aumentam a cada onda, até os máximos de `configuracoes.py`.

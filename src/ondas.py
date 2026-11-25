@@ -69,7 +69,8 @@ class GerenciadorOndas:
         self.inimigos.empty()
         for tipo, posicao in zip(self.tipos_da_onda, cfg.POSICOES_INIMIGOS):
             imagem = self.recursos.imagem(tipo.nome_imagem, cfg.TAMANHO_INIMIGO)
-            self.inimigos.add(tipo(imagem, posicao))
+            projetil = self.recursos.imagem(tipo.nome_projetil, cfg.TAMANHO_PROJETIL)
+            self.inimigos.add(tipo(imagem, posicao, projetil))
 
     def _avancar_onda(self) -> None:
         self.indice_onda += 1

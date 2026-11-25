@@ -21,8 +21,9 @@ class Jogador(pygame.sprite.Sprite):
         self.rect = imagem.get_rect(center=posicao)
         # O Rect só guarda números inteiros. A posição exata fica no Vector2.
         self.posicao = pygame.math.Vector2(posicao)
-        # O nome "radius" é o que o Pygame procura na colisão por círculos
-        self.radius = cfg.RAIO_COLISAO_JOGADOR
+        # A máscara marca os pixels visíveis da imagem. O Pygame procura o nome
+        # "mask": só há colisão quando pixels visíveis se tocam
+        self.mask = pygame.mask.from_surface(imagem)
         self.controles = controles
         # Começam com _ porque só a própria classe pode alterá-las
         self._vidas = cfg.VIDAS_MAXIMAS

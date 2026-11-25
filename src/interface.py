@@ -78,7 +78,7 @@ class MenuBotoes:
 class HUD:
     """As informações dos jogadores na parte de baixo da tela."""
 
-    TAMANHO_CORACAO = (22, 22)
+    TAMANHO_CORACAO = (27, 27)
     LARGURA_BLOCO = 220
     MARGEM = 30
     Y_NOME, Y_CORACOES, Y_PONTOS = 500, 530, 564

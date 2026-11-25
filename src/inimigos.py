@@ -13,16 +13,20 @@ from src.projetil import Projetil
 class Inimigo(pygame.sprite.Sprite, ABC):
     """Base de todos os inimigos.
 
-    Cada tipo define a sua imagem (nome_imagem), o seu ritmo (intervalo) e o
-    seu jeito de atacar (método atacar). O resto é herdado daqui.
+    Cada tipo define a sua imagem (nome_imagem), a imagem do seu projétil
+    (nome_projetil), o seu ritmo (intervalo) e o seu jeito de atacar (método
+    atacar). O resto é herdado daqui.
     """
 
     nome_imagem: str
+    nome_projetil: str
     intervalo: float
 
-    def __init__(self, imagem: pygame.Surface, posicao: tuple[int, int]):
+    def __init__(self, imagem: pygame.Surface, posicao: tuple[int, int],
+                 imagem_projetil: pygame.Surface | None = None):
         super().__init__()
         self.image = imagem
+        self.imagem_projetil = imagem_projetil
         self.rect = imagem.get_rect(center=posicao)
         self.cronometro = 0.0
 
@@ -48,6 +52,7 @@ class InimigoChuva(Inimigo):
     """Faz projéteis caírem do alto."""
 
     nome_imagem = "inimigo_chuva.png"
+    nome_projetil = "projetil_chuva.png"
     intervalo = cfg.INTERVALO_CHUVA
 
     def atacar(self, arena: Arena, alvos: list, velocidade: float) -> list[Projetil]:
@@ -56,7 +61,7 @@ class InimigoChuva(Inimigo):
         for _ in range(cfg.QUANTIDADE_CHUVA):
             x = random.uniform(arena.rect.left + cfg.RAIO_PROJETIL,
                                arena.rect.right - cfg.RAIO_PROJETIL)
-            projeteis.append(Projetil((x, y), (0, velocidade)))
+            projeteis.append(Projetil((x, y), (0, velocidade), self.imagem_projetil))
         return projeteis
 
 
@@ -64,6 +69,7 @@ class InimigoLateral(Inimigo):
     """Atira na horizontal, vindo de um dos lados."""
 
     nome_imagem = "inimigo_lateral.png"
+    nome_projetil = "projetil_lateral.png"
     intervalo = cfg.INTERVALO_LATERAL
 
     def atacar(self, arena: Arena, alvos: list, velocidade: float) -> list[Projetil]:
@@ -72,13 +78,14 @@ class InimigoLateral(Inimigo):
                            arena.rect.bottom - cfg.RAIO_PROJETIL)
         sentido = random.choice((1, -1))  # 1: vai para a direita; -1: para a esquerda
         x = area.left if sentido == 1 else area.right
-        return [Projetil((x, y), (sentido * velocidade, 0))]
+        return [Projetil((x, y), (sentido * velocidade, 0), self.imagem_projetil)]
 
 
 class InimigoMira(Inimigo):
     """Atira de onde está, mirando em um dos corações."""
 
     nome_imagem = "inimigo_mira.png"
+    nome_projetil = "projetil_mira.png"
     intervalo = cfg.INTERVALO_MIRA
 
     def atacar(self, arena: Arena, alvos: list, velocidade: float) -> list[Projetil]:
@@ -90,7 +97,8 @@ class InimigoMira(Inimigo):
         if caminho.length_squared() == 0:
             return []
         # normalize() deixa o vetor com comprimento 1: sobra só a direção
-        return [Projetil(origem, caminho.normalize() * velocidade)]
+        return [Projetil(origem, caminho.normalize() * velocidade,
+                         self.imagem_projetil)]
 
 
 # Tipos que podem aparecer nas ondas. Para criar um inimigo novo, basta criar a

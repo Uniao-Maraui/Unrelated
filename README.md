@@ -88,29 +88,41 @@ Para trocar um arquivo, substitua-o mantendo **o mesmo nome**. O código não pr
 
 | Arquivo em `assets/imagens` | Uso | Tamanho no jogo |
 |---|---|---|
-| `jogador1.png` | Jogador 1 e seus ícones de vida | 24 x 24 |
-| `jogador2.png` | Jogador 2 e seus ícones de vida | 24 x 24 |
+| `jogador1.png` | Jogador 1 e seus ícones de vida | 27 x 27 |
+| `jogador2.png` | Jogador 2 e seus ícones de vida | 27 x 27 |
 | `inimigo_chuva.png` | Inimigo que faz projéteis caírem | 64 x 64 |
 | `inimigo_lateral.png` | Inimigo que atira dos lados | 64 x 64 |
 | `inimigo_mira.png` | Inimigo que mira nos corações | 64 x 64 |
-| `item_pontos.png` | Item de pontos | 20 x 20 |
-| `item_cura.png` | Item de cura | 20 x 20 |
+| `projetil_chuva.png` | Projétil do inimigo da chuva | 24 x 24 |
+| `projetil_lateral.png` | Projétil do inimigo lateral | 24 x 24 |
+| `projetil_mira.png` | Projétil do inimigo que mira | 24 x 24 |
+| `item_pontos.png` | Item de pontos | 32 x 32 |
+| `item_cura.png` | Item de cura | 32 x 32 |
 
 Prefira PNGs quadrados, com fundo transparente e pouca margem. O jogo redimensiona a imagem, então uma que não seja quadrada fica distorcida.
 
 Os sons ficam em `assets/sons`: `dano.wav`, `coleta.wav`, `cura.wav`, `game_over.wav` e `musica.wav`. Para usar uma música em outro formato, como OGG, mude `ARQUIVO_MUSICA` em `src/configuracoes.py`.
 
-O script `ferramentas/gerar_recursos.py` recria apenas os arquivos genéricos que estiverem faltando. Ele nunca sobrescreve um arquivo existente.
+Os projéteis soltos são círculos brancos desenhados pelo código. O dano e a coleta acontecem quando pixels visíveis se tocam; partes transparentes não contam. Por isso, um desenho maior também aumenta a área de acerto, e um fundo que não seja transparente contaria como parte do desenho. As imagens dos projéteis não giram, então prefira desenhos redondos ou, na chuva, que apontem para o sentido da queda.
+
+O script `ferramentas/gerar_recursos.py` recria os arquivos que ele sabe desenhar e que estiverem faltando: os genéricos e o anel do projétil lateral. Ele nunca sobrescreve um arquivo existente e não cria os outros dois projéteis.
 
 ## Fontes e licenças
 
-As imagens e os sons atuais são genéricos, criados pelo script `ferramentas/gerar_recursos.py`. Nenhum foi baixado da internet.
+Quase todas as imagens usadas no jogo vêm de pacotes de outras pessoas. O projétil lateral foi desenhado neste projeto. Os sons ainda são genéricos, criados pelo script `ferramentas/gerar_recursos.py`.
+
+Os arquivos de arte de terceiros pertencem aos seus autores. Eles estão aqui como parte deste jogo e não devem ser retirados do projeto para redistribuição ou revenda.
+
+| Arquivos | Pacote e autoria | Endereço de origem | Termos | Alterações |
+|---|---|---|---|---|
+| `inimigo_chuva.png`, `inimigo_lateral.png`, `inimigo_mira.png` | RPG Battlers, de LimeZu | https://limezu.itch.io/21rpg-battlers | Uso gratuito ou comercial e modificação permitidos; redistribuição e revenda proibidas | Centralizados em um quadro de 32 x 32 |
+| `jogador1.png`, `jogador2.png` | Retro UI Kit Lite, de Willosuna | https://willosuna.itch.io/retro-ui-kit-lite | Uso em jogos e modificação permitidos, crédito opcional; proibido redistribuir as imagens como pacote | Ampliados 3 vezes; o do jogador 2 foi pintado de azul |
+| `projetil_chuva.png` | Pixel Spaceships & Shmup Kit Lite, de Willosuna | Página da versão completa, indicada no pacote: https://willosuna.itch.io/pixel-shmup-kit | Uso em jogos e modificação permitidos, crédito opcional; proibido redistribuir as imagens como pacote | Ampliado 2 vezes |
+| `projetil_lateral.png` | Desenho criado neste projeto | `ferramentas/gerar_recursos.py`, função `criar_anel` | Não vem de pacote de outra pessoa | Nenhuma |
+| `projetil_mira.png` | Amostra gratuita da Northleaf Studio; o leia-me informa uso de assistência de IA | https://northleafstudio.itch.io/space-shooter-sprites-pixel-art | Grátis em jogos pessoais e comerciais, pode ficar no repositório do jogo; proibido redistribuir como pacote de arte | Primeiro quadro, ampliado 2 vezes |
+| `item_pontos.png`, `item_cura.png` | Pixel UI & Pickup FX (Pixel FX Series, pacote 8); autoria não informada no pacote | Não informado no pacote | Uso em jogos e modificação permitidos, crédito opcional; proibido redistribuir como arquivos avulsos ou pacote | Primeiro quadro da animação |
 
 Ao usar um recurso de outra pessoa, confira se a licença permite o uso e registre aqui. Não use imagens, sons ou músicas originais de Undertale ou Deltarune.
-
-| Arquivo | Autoria | Endereço de origem | Licença |
-|---|---|---|---|
-| (nenhum recurso externo por enquanto) | | | |
 
 ## Estrutura de pastas
 

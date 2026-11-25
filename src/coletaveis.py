@@ -21,7 +21,7 @@ class Coletavel(pygame.sprite.Sprite, ABC):
         super().__init__()
         self.image = imagem
         self.rect = imagem.get_rect(center=posicao)
-        self.radius = cfg.RAIO_COLISAO_COLETAVEL
+        self.mask = pygame.mask.from_surface(imagem)  # usada na colisão
         self.tempo_restante = cfg.DURACAO_COLETAVEL
 
     def update(self, dt: float) -> None:

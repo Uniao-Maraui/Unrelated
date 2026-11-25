@@ -58,7 +58,7 @@ def aplicar_danos(jogadores: list[Jogador],
     for jogador in jogadores:
         if jogador.vivo and not jogador.invulneravel:
             tocados = pygame.sprite.spritecollide(
-                jogador, projeteis, False, pygame.sprite.collide_circle)
+                jogador, projeteis, False, pygame.sprite.collide_mask)
             if tocados:
                 acertos.append((jogador, tocados))
 
@@ -81,7 +81,7 @@ def distribuir_coletaveis(jogadores: list[Jogador],
     coletados = []
     for item in list(coletaveis):
         candidatos = [jogador for jogador in jogadores
-                      if jogador.vivo and pygame.sprite.collide_circle(jogador, item)]
+                      if jogador.vivo and pygame.sprite.collide_mask(jogador, item)]
         if not candidatos:
             continue
         distancias = [jogador.posicao.distance_to(item.rect.center)

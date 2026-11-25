@@ -166,15 +166,34 @@ def criar_superficie(desenho: list[str]) -> pygame.Surface:
     return superficie
 
 
+# O projétil lateral é desenhado com círculos, e não com uma matriz de letras
+NOME_ANEL = "projetil_lateral.png"
+ROSA_FORTE = (255, 70, 170)
+ROSA_CLARO = (255, 185, 230)
+
+
+def criar_anel() -> pygame.Surface:
+    """Anel rosa de dois tons, com o miolo transparente (24 x 24 pixels)."""
+    imagem = pygame.Surface((24, 24), pygame.SRCALPHA)
+    centro = (12, 12)
+    # Cada círculo é pintado por cima do anterior
+    pygame.draw.circle(imagem, ROSA_FORTE, centro, 10)
+    pygame.draw.circle(imagem, ROSA_CLARO, centro, 8)
+    pygame.draw.circle(imagem, (0, 0, 0, 0), centro, 6)  # abre o miolo
+    return imagem
+
+
 def gerar_imagens(pasta: Path) -> None:
     """Cria na pasta apenas as imagens que faltam."""
     pasta.mkdir(parents=True, exist_ok=True)
-    for nome, desenho in IMAGENS.items():
+    figuras = {nome: criar_superficie(desenho) for nome, desenho in IMAGENS.items()}
+    figuras[NOME_ANEL] = criar_anel()
+    for nome, figura in figuras.items():
         caminho = pasta / nome
         if caminho.exists():
             print(f"mantido: {nome}")
         else:
-            pygame.image.save(criar_superficie(desenho), str(caminho))
+            pygame.image.save(figura, str(caminho))
             print(f"criado:  {nome}")
 
 
