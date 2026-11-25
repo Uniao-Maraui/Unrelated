@@ -5,9 +5,10 @@ import pygame
 from src import configuracoes as cfg
 from src.arena import Arena
 from src.cenas.cena import Cena
-from src.inimigos import InimigoChuva
+from src.inimigos import TIPOS_INIMIGOS
 from src.interface import HUD
 from src.jogador import Jogador
+from src.ondas import GerenciadorOndas
 from src.regras import aplicar_danos, calcular_resultado
 
 
@@ -24,9 +25,7 @@ class CenaPartida(Cena):
             Jogador("Jogador 1", imagem, cfg.CENTRO_ARENA,
                     [cfg.TECLAS_P1, cfg.TECLAS_P2]),
         ]
-        imagem_inimigo = jogo.recursos.imagem(InimigoChuva.nome_imagem, cfg.TAMANHO_INIMIGO)
-        self.inimigos = pygame.sprite.Group(
-            InimigoChuva(imagem_inimigo, cfg.POSICOES_INIMIGOS[0]))
+        self.ondas = GerenciadorOndas(TIPOS_INIMIGOS, jogo.recursos, self.arena)
         self.projeteis = pygame.sprite.Group()
         self.hud = HUD(pygame.font.Font(None, 32))
 
@@ -36,6 +35,7 @@ class CenaPartida(Cena):
 
     def atualizar(self, dt: float) -> None:
         teclas = pygame.key.get_pressed()
+        self.arena.update(dt)
         for jogador in self.jogadores:
             jogador.update(dt, teclas, self.arena)
             if jogador.vivo:
@@ -47,9 +47,7 @@ class CenaPartida(Cena):
 
     def _criar_ataques(self, dt: float) -> None:
         vivos = [jogador for jogador in self.jogadores if jogador.vivo]
-        for inimigo in self.inimigos:
-            self.projeteis.add(inimigo.atualizar_ataque(
-                dt, self.arena, vivos, cfg.VELOCIDADE_PROJETIL))
+        self.projeteis.add(self.ondas.update(dt, vivos, len(self.projeteis)))
 
     def _verificar_fim(self) -> None:
         """A partida acaba quando alguém perde todas as vidas."""
@@ -59,7 +57,7 @@ class CenaPartida(Cena):
 
     def desenhar(self, tela: pygame.Surface) -> None:
         tela.fill(cfg.PRETO)
-        self.inimigos.draw(tela)
+        self.ondas.inimigos.draw(tela)
         self.arena.desenhar(tela)
         self.projeteis.draw(tela)
         for jogador in self.jogadores:
